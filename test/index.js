@@ -10,7 +10,7 @@ describe('KeyringController', () => {
   let keyringController
   const password = 'password123'
   const seedWords = 'puzzle seed penalty soldier say clay field arctic metal hen cage runway'
-  const addresses = ['0xeF35cA8EbB9669A35c31b5F6f249A9941a812AC1'.toLowerCase()]
+  const addresses = ['THVmKRQci3Jd45HPnn5R2nnbFB6YPDxQWK']
   const accounts = []
   // let originalKeystore
 
@@ -88,7 +88,7 @@ describe('KeyringController', () => {
   describe('#restoreKeyring', () => {
     it(`should pass a keyring's serialized data back to the correct type.`, async () => {
       const mockSerialized = {
-        type: 'HD Key Tree',
+        type: 'Tron HD Key Tree',
         data: {
           mnemonic: seedWords,
           numberOfAccounts: 1,

@@ -1,27 +1,27 @@
 {
-  "name": "eth-keyring-controller",
+  "name": "tron-keyring-controller",
   "version": "4.0.0",
-  "description": "A module for managing various keyrings of Ethereum accounts, encrypting them, and using them.",
+  "description": "A module for managing various keyrings of Tron accounts, encrypting them, and using them.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require test/helper.js test/index.js"
+    "test": "mocha --require test/helper.js test/index.js test/tron-hd-keyring.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/MetaMask/KeyringController.git"
+    "url": "git+ssh://git@github.com/MegTron/TronKeyringController.git"
   },
   "keywords": [
-    "ethereum",
+    "tron",
     "metamask",
     "accounts",
     "keys"
   ],
-  "author": "Dan Finlay <dan@danfinlay.com>",
+  "author": "Laoda Zhao<laodaz666@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MetaMask/KeyringController/issues"
+    "url": "https://github.com/MegTron/TronKeyringController/issues"
   },
-  "homepage": "https://github.com/MetaMask/KeyringController#readme",
+  "homepage": "https://github.com/MegTron/TronKeyringController#readme",
   "devDependencies": {
     "clone": "^2.1.1",
     "eslint-plugin-mocha": "^4.11.0",
@@ -33,6 +33,7 @@
     "sinon": "^3.3.0"
   },
   "dependencies": {
+    "bip32": "^1.0.2",
     "bip39": "^2.4.0",
     "bluebird": "^3.5.0",
     "browser-passworder": "^2.0.3",
@@ -42,6 +43,7 @@
     "ethereumjs-util": "^5.1.2",
     "loglevel": "^1.5.0",
     "obs-store": "^2.4.1",
-    "promise-filter": "^1.1.0"
+    "promise-filter": "^1.1.0",
+    "tronweb": "git+https://github.com/tronprotocol/tron-web.git"
   }
 }

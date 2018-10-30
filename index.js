@@ -9,8 +9,9 @@ const encryptor = require('browser-passworder')
 const sigUtil = require('eth-sig-util')
 const normalizeAddress = sigUtil.normalize
 // Keyrings:
+// TODO: need to replace with tron-simple-keyring
 const SimpleKeyring = require('eth-simple-keyring')
-const HdKeyring = require('eth-hd-keyring')
+const HdKeyring = require('./tron-hd-keyring')
 const keyringTypes = [
   SimpleKeyring,
   HdKeyring,
@@ -358,7 +359,7 @@ class KeyringController extends EventEmitter {
   // puts the current seed words into the state tree.
   createFirstKeyTree () {
     this.clearKeyrings()
-    return this.addNewKeyring('HD Key Tree', { numberOfAccounts: 1 })
+    return this.addNewKeyring('Tron HD Key Tree', { numberOfAccounts: 1 })
     .then((keyring) => {
       return keyring.getAccounts()
     })
