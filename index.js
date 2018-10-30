@@ -17,6 +17,8 @@ const keyringTypes = [
   HdKeyring,
 ]
 
+const HD_KEYRING_NAME = 'HD Key Tree'
+
 class KeyringController extends EventEmitter {
 
   // PUBLIC METHODS
@@ -96,7 +98,7 @@ class KeyringController extends EventEmitter {
 
     return this.persistAllKeyrings(password)
     .then(() => {
-      return this.addNewKeyring('Tron HD Key Tree', {
+      return this.addNewKeyring(HD_KEYRING_NAME, {
         mnemonic: seed,
         numberOfAccounts: 1,
       })
@@ -359,7 +361,7 @@ class KeyringController extends EventEmitter {
   // puts the current seed words into the state tree.
   createFirstKeyTree () {
     this.clearKeyrings()
-    return this.addNewKeyring('Tron HD Key Tree', { numberOfAccounts: 1 })
+    return this.addNewKeyring(HD_KEYRING_NAME, { numberOfAccounts: 1 })
     .then((keyring) => {
       return keyring.getAccounts()
     })

@@ -5,6 +5,7 @@ const ethUtil = require('ethereumjs-util')
 const BN = ethUtil.BN
 const mockEncryptor = require('./lib/mock-encryptor')
 const sinon = require('sinon')
+const HD_KEYRING_NAME = 'HD Key Tree'
 
 describe('KeyringController', () => {
   let keyringController
@@ -88,7 +89,7 @@ describe('KeyringController', () => {
   describe('#restoreKeyring', () => {
     it(`should pass a keyring's serialized data back to the correct type.`, async () => {
       const mockSerialized = {
-        type: 'Tron HD Key Tree',
+        type: HD_KEYRING_NAME,
         data: {
           mnemonic: seedWords,
           numberOfAccounts: 1,

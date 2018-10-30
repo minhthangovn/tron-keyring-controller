@@ -19,7 +19,7 @@ const eventServer = 'https://api.trongrid.io/'
 const BIP44_INDEX = '195'
 
 // Options:
-const type = 'Tron HD Key Tree'
+const type = 'HD Key Tree'
 
 log.setDefaultLevel(process.env.METAMASK_DEBUG ? 'debug' : 'warn')
 
