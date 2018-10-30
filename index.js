@@ -96,7 +96,7 @@ class KeyringController extends EventEmitter {
 
     return this.persistAllKeyrings(password)
     .then(() => {
-      return this.addNewKeyring('HD Key Tree', {
+      return this.addNewKeyring('Tron HD Key Tree', {
         mnemonic: seed,
         numberOfAccounts: 1,
       })
