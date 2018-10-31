@@ -11,6 +11,7 @@ const log = require('loglevel')
 const EventEmitter = require('events').EventEmitter
 const bip32 = require('bip32')
 const bip39 = require('bip39')
+const ethUtil = require('ethereumjs-util');
 const TronWeb = require('tronweb')
 
 const fullNode = 'https://api.trongrid.io'
@@ -91,36 +92,25 @@ class HdKeyring extends EventEmitter {
   }
 
   // tx is an instance of the ethereumjs-transaction class.
-  signTransaction (address, tx) {
+  signTransaction (withAccount, tx) {
     log.debug('tronhd signTX')
-    /*
-    const wallet = this._getWalletForAccount(address)
-    var privKey = wallet.getPrivateKey()
-    tx.sign(privKey)
-    return Promise.resolve(tx)
-    */
+    const wallet = this._getWalletForAccount(withAccount)
+    return wallet.trx.sign(tx)
   }
 
   // For eth_sign, we need to sign transactions:
   // hd
   signMessage (withAccount, data) {
     log.debug('tronhd signMSG')
-    /*
     const wallet = this._getWalletForAccount(withAccount)
-    const message = ethUtil.stripHexPrefix(data)
-    var privKey = wallet.getPrivateKey()
-    var msgSig = ethUtil.ecsign(new Buffer(message, 'hex'), privKey)
-    var rawMsgSig = ethUtil.bufferToHex(sigUtil.concatSig(msgSig.v, msgSig.r, msgSig.s))
-    return Promise.resolve(rawMsgSig)
-    */
+    var privKey = wallet.defaultPrivateKey
+    return wallet.trx.sign(data, privKey, true)
   }
 
   exportAccount (address) {
     log.debug('tronhd exporthd')
-    /*
     const wallet = this._getWalletForAccount(address)
-    return Promise.resolve(wallet.getPrivateKey().toString('hex'))
-    */
+    return Promise.resolve(wallet.defaultPrivateKey)
   }
 
   /* PRIVATE METHODS */
@@ -133,6 +123,12 @@ class HdKeyring extends EventEmitter {
     this.mnemonic = mnemonic
     this.seed = bip39.mnemonicToSeedHex(mnemonic);
     this.root = bip32.fromSeed(new Buffer(this.seed, 'hex'))
+  }
+
+  _getWalletForAccount (account) {
+    return this.wallets.find((w) => {
+      return w.defaultAddress.base58 === account
+    })
   }
 }
 
