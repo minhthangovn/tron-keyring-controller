@@ -6,8 +6,6 @@ const EventEmitter = require('events').EventEmitter
 const ObservableStore = require('obs-store')
 const filter = require('promise-filter')
 const encryptor = require('browser-passworder')
-const sigUtil = require('eth-sig-util')
-const normalizeAddress = sigUtil.normalize
 // Keyrings:
 // TODO: need to replace with tron-simple-keyring
 const SimpleKeyring = require('eth-simple-keyring')
@@ -18,6 +16,7 @@ const keyringTypes = [
 ]
 
 const HD_KEYRING_NAME = 'HD Key Tree'
+const normalizeAddress = (w) => w
 
 class KeyringController extends EventEmitter {
 
