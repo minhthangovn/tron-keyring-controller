@@ -6,6 +6,7 @@ const EventEmitter = require('events').EventEmitter
 const ObservableStore = require('obs-store')
 const filter = require('promise-filter')
 const encryptor = require('browser-passworder')
+const TronWeb = require('tronweb')
 // Keyrings:
 // TODO: need to replace with tron-simple-keyring
 const SimpleKeyring = require('eth-simple-keyring')
@@ -565,6 +566,18 @@ class KeyringController extends EventEmitter {
     return this.memStore.updateState({ keyrings })
   }
 
+  // Utils
+  static hexStringToBase58 (sHexString) {
+    return TronWeb.address.fromHex(sHexString)
+  }
+
+  static base58ToHexString (sBase58) {
+    return TronWeb.address.toHex(sBase58)
+  }
+
+  static base58ToHexAddress (sBase58) {
+    return '0x' + TronWeb.address.toHex(sBase58)
+  }
 }
 
 module.exports = KeyringController

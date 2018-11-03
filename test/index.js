@@ -6,6 +6,8 @@ const BN = ethUtil.BN
 const mockEncryptor = require('./lib/mock-encryptor')
 const sinon = require('sinon')
 const HD_KEYRING_NAME = 'HD Key Tree'
+const BASE58_ADDRESS = 'TSwZDyupYNUgYB1DJy2wQa6kgw44B7eGnA'
+const HEX_ADDRESS = '41ba2a30037af603c9ed4242bf51e037db4b7f09ba'
 
 describe('KeyringController', () => {
   let keyringController
@@ -183,6 +185,29 @@ describe('KeyringController', () => {
       keyrings.forEach(keyring => {
         assert.strictEqual(keyring.wallets.length, 1)
       })
+    })
+  })
+
+  describe('#hexStringToBase58', () => {
+    it('returns the base58 form of address', () => {
+      let base58Addr = KeyringController.hexStringToBase58('0x' + HEX_ADDRESS)
+      assert.strictEqual(base58Addr, base58Addr)
+      base58Addr = KeyringController.hexStringToBase58(HEX_ADDRESS)
+      assert.strictEqual(base58Addr, base58Addr)
+    })
+  })
+
+  describe('#base58ToHexString', () => {
+    it('returns the hex form of address', () => {
+      const hexAddr = KeyringController.base58ToHexString(BASE58_ADDRESS)
+      assert.strictEqual(hexAddr, HEX_ADDRESS)
+    })
+  })
+
+  describe('#base58ToHexAddress', () => {
+    it('returns the hex form of address with 0x prefix', () => {
+      const hexAddr = KeyringController.base58ToHexAddress(BASE58_ADDRESS)
+      assert.strictEqual(hexAddr, '0x' + HEX_ADDRESS)
     })
   })
 })
