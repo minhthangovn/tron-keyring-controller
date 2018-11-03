@@ -199,7 +199,11 @@ describe('KeyringController', () => {
 
   describe('#base58ToHexString', () => {
     it('returns the hex form of address', () => {
-      const hexAddr = KeyringController.base58ToHexString(BASE58_ADDRESS)
+      let hexAddr = KeyringController.base58ToHexString(BASE58_ADDRESS)
+      assert.strictEqual(hexAddr, HEX_ADDRESS)
+      hexAddr = KeyringController.base58ToHexString(HEX_ADDRESS)
+      assert.strictEqual(hexAddr, HEX_ADDRESS)
+      hexAddr = KeyringController.base58ToHexString('0x' + HEX_ADDRESS)
       assert.strictEqual(hexAddr, HEX_ADDRESS)
     })
   })

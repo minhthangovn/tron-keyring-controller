@@ -572,6 +572,12 @@ class KeyringController extends EventEmitter {
   }
 
   static base58ToHexString (sBase58) {
+    if (sBase58.length == 44 && sBase58.indexOf('0x') == 0) {
+      sBase58 = sBase58.slice(2)
+    }
+    if (sBase58.length == 42 && sBase58.indexOf('41') == 0) {
+      return sBase58
+    }
     return TronWeb.address.toHex(sBase58)
   }
 
