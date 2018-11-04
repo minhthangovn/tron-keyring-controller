@@ -188,6 +188,27 @@ describe('KeyringController', () => {
     })
   })
 
+  describe('#exportAccount', () => {
+    it('returns the private key of the account', async () => {
+      keyringController.clearKeyrings()
+      // Add HD Keyring
+      await keyringController.addNewKeyring('HD Key Tree', {
+        mnemonic: seedWords,
+        numberOfAccounts: 1,
+      })
+      // Add simple pair keyring
+      const privateKey = 'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3'
+      await keyringController.addNewKeyring('Simple Key Pair', [ privateKey ])
+      // Export simple pair private key
+      const exported = await keyringController.exportAccount('TJwm1qUHMpo8vggqMyXJV3xhzDdfwA5A4L')
+      assert.strictEqual(exported, privateKey, 'exported private key match expectation')
+      // Export HD private key
+      const exportedHD = await keyringController.exportAccount('THVmKRQci3Jd45HPnn5R2nnbFB6YPDxQWK')
+      const expectedHDPrivateKey = '0d40c8cdb822d7689b31435db237be501a06c934916efce51c7ecf11ad0f24c5'
+      assert.strictEqual(exportedHD, expectedHDPrivateKey, 'exported private key match expectation for HD wallet')
+    })
+  })
+
   describe('#hexStringToBase58', () => {
     it('returns the base58 form of address', () => {
       let base58Addr = KeyringController.hexStringToBase58('0x' + HEX_ADDRESS)

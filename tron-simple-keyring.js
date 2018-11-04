@@ -88,7 +88,7 @@ class SimpleKeyring extends EventEmitter {
   /* PRIVATE METHODS */
 
   _getWalletForAccount (account) {
-    let wallet = this.wallets.find(w => w.address === address)
+    let wallet = this.wallets.find(w => w.address === account )
     if (!wallet) throw new Error('Simple Keyring - Unable to find matching address.')
     return wallet
   }

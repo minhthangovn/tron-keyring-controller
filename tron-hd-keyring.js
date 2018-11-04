@@ -98,7 +98,7 @@ class HdKeyring extends EventEmitter {
   exportAccount (address) {
     log.debug('tronhd exporthd')
     const wallet = this._getWalletForAccount(address)
-    return Promise.resolve(wallet.defaultPrivateKey)
+    return Promise.resolve(wallet.privateKey)
   }
 
   /* PRIVATE METHODS */
@@ -114,9 +114,9 @@ class HdKeyring extends EventEmitter {
   }
 
   _getWalletForAccount (account) {
-    return this.wallets.find((w) => {
-      return w.address === account
-    })
+    let wallet = this.wallets.find(w => w.address === account )
+    if (!wallet) throw new Error('HD Keyring - Unable to find matching address.')
+    return wallet
   }
 }
 
