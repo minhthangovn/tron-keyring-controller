@@ -80,7 +80,7 @@ describe('KeyringController', () => {
       const previousAccounts = await keyringController.getAccounts()
       const keyring = await keyringController.addNewKeyring('Simple Key Pair', [ privateKey ])
       const keyringAccounts = await keyring.getAccounts()
-      const expectedKeyringAccounts = ['0x627306090abab3a6e1400e9345bc60c78a8bef57']
+      const expectedKeyringAccounts = ['TJwm1qUHMpo8vggqMyXJV3xhzDdfwA5A4L']
       assert.deepEqual(keyringAccounts, expectedKeyringAccounts, 'keyringAccounts match expectation')
       const allAccounts = await keyringController.getAccounts()
       const expectedAllAccounts = previousAccounts.concat(expectedKeyringAccounts)
@@ -121,7 +121,7 @@ describe('KeyringController', () => {
     it('removes an account from the corresponding keyring', async () => {
       const account = {
         privateKey: 'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3',
-        publicKey: '0x627306090abab3a6e1400e9345bc60c78a8bef57',
+        publicKey: 'TJwm1qUHMpo8vggqMyXJV3xhzDdfwA5A4L',
       }
 
       const accountsBeforeAdding = await keyringController.getAccounts()
@@ -139,7 +139,7 @@ describe('KeyringController', () => {
     it('removes the keyring if there are no accounts after removal', async () => {
       const account = {
         privateKey: 'c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3',
-        publicKey: '0x627306090abab3a6e1400e9345bc60c78a8bef57',
+        publicKey: 'TJwm1qUHMpo8vggqMyXJV3xhzDdfwA5A4L',
       }
 
       const accountsBeforeAdding = await keyringController.getAccounts()

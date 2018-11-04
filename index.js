@@ -8,8 +8,7 @@ const filter = require('promise-filter')
 const encryptor = require('browser-passworder')
 const TronWeb = require('tronweb')
 // Keyrings:
-// TODO: need to replace with tron-simple-keyring
-const SimpleKeyring = require('eth-simple-keyring')
+const SimpleKeyring = require('./tron-simple-keyring')
 const HdKeyring = require('./tron-hd-keyring')
 const keyringTypes = [
   SimpleKeyring,

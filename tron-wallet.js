@@ -1,5 +1,6 @@
 
 const TronWeb = require('tronweb')
+const { ec } = require('elliptic')
 const fullNode = 'https://api.trongrid.io'
 const solidityNode = 'https://api.trongrid.io'
 const eventServer = 'https://api.trongrid.io/'
@@ -14,7 +15,7 @@ class TronWallet {
   }
 
   deserialize (opts = {}) {
-    this.privateKey = opts.privateKey
+    this.privateKey = opts.privateKey.replace(/^0x/, '')
     this.wallet = new TronWeb(fullNode, solidityNode, eventServer, this.privateKey)
     this.address = this.wallet.defaultAddress.base58
     this.hexAddress = this.wallet.defaultAddress.hex
@@ -29,6 +30,16 @@ class TronWallet {
   }
 
   // Utils
+  static generate() {
+    const e = new ec('secp256k1')
+    const privateKeyBN = e.genKeyPair().getPrivate()
+    let privateKey = privateKeyBN.toString('hex')
+    while (privateKey.length < 64) {
+      privateKey = '0' + privateKey
+    }
+    return new TronWallet({ privateKey })
+  }
+
   static hexStringToBase58 (sHexString) {
     return TronWeb.address.fromHex(sHexString)
   }
@@ -46,6 +57,7 @@ class TronWallet {
   static base58ToHexAddress (sBase58) {
     return '0x' + TronWeb.address.toHex(sBase58)
   }
+
 }
 
 module.exports = TronWallet
