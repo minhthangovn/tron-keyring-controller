@@ -106,9 +106,7 @@ describe('TronHDKeyring', function () {
       // Push a mock wallet
       const desiredOutput = 'foo'
       keyring.wallets.push({
-        defaultAddress: {
-          base58: desiredOutput,
-        }
+        address: desiredOutput
       })
 
       const output = keyring.getAccounts()

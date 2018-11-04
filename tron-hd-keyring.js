@@ -11,12 +11,8 @@ const log = require('loglevel')
 const EventEmitter = require('events').EventEmitter
 const bip32 = require('bip32')
 const bip39 = require('bip39')
-const ethUtil = require('ethereumjs-util');
-const TronWeb = require('tronweb')
+const TronWallet = require('./tron-wallet')
 
-const fullNode = 'https://api.trongrid.io'
-const solidityNode = 'https://api.trongrid.io'
-const eventServer = 'https://api.trongrid.io/'
 const BIP44_INDEX = '195'
 
 // Options:
@@ -73,38 +69,30 @@ class HdKeyring extends EventEmitter {
       // TODO: not really HD implmentation, but good enough currently.
       const child = this.root.derivePath(`m/44'/${ BIP44_INDEX }'/${ i }'/0/0`, this.seed);
       const privateKey = child.privateKey.toString('hex');
-      const wallet = new TronWeb(fullNode, solidityNode, eventServer, privateKey)
+      const wallet = new TronWallet({ privateKey })
       newWallets.push(wallet)
       this.wallets.push(wallet)
     }
-    const hexWallets = newWallets.map((w) => {
-      return w.defaultAddress.base58
-    })
-    return Promise.resolve(hexWallets)
+    return Promise.resolve(newWallets.map((w) => w.address))
   }
 
   getAccounts () {
     log.debug('tronhd getaccounts')
-    return Promise.resolve(this.wallets.map((w) => {
-      // return TronWeb.address.fromPrivateKey(w.defaultPrivateKey)
-      return w.defaultAddress.base58
-    }))
+    return Promise.resolve(this.wallets.map((w) => w.address))
   }
 
   // tx is an instance of the ethereumjs-transaction class.
   signTransaction (withAccount, tx) {
     log.debug('tronhd signTX')
     const wallet = this._getWalletForAccount(withAccount)
-    return wallet.trx.sign(tx)
+    return wallet.signTransaction(tx)
   }
 
   // For eth_sign, we need to sign transactions:
-  // hd
   signMessage (withAccount, data) {
     log.debug('tronhd signMSG')
     const wallet = this._getWalletForAccount(withAccount)
-    var privKey = wallet.defaultPrivateKey
-    return wallet.trx.sign(data, privKey, true)
+    return wallet.signMessage(data)
   }
 
   exportAccount (address) {
@@ -127,7 +115,7 @@ class HdKeyring extends EventEmitter {
 
   _getWalletForAccount (account) {
     return this.wallets.find((w) => {
-      return w.defaultAddress.base58 === account
+      return w.address === account
     })
   }
 }
