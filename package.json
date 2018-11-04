@@ -43,6 +43,6 @@
     "loglevel": "^1.5.0",
     "obs-store": "^2.4.1",
     "promise-filter": "^1.1.0",
-    "tronweb": "^2.0.24"
+    "tronweb": "2.0.24"
   }
 }
