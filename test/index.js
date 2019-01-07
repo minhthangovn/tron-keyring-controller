@@ -208,31 +208,4 @@ describe('KeyringController', () => {
       assert.strictEqual(exportedHD, expectedHDPrivateKey, 'exported private key match expectation for HD wallet')
     })
   })
-
-  describe('#hexStringToBase58', () => {
-    it('returns the base58 form of address', () => {
-      let base58Addr = KeyringController.hexStringToBase58('0x' + HEX_ADDRESS)
-      assert.strictEqual(base58Addr, base58Addr)
-      base58Addr = KeyringController.hexStringToBase58(HEX_ADDRESS)
-      assert.strictEqual(base58Addr, base58Addr)
-    })
-  })
-
-  describe('#base58ToHexString', () => {
-    it('returns the hex form of address', () => {
-      let hexAddr = KeyringController.base58ToHexString(BASE58_ADDRESS)
-      assert.strictEqual(hexAddr, HEX_ADDRESS)
-      hexAddr = KeyringController.base58ToHexString(HEX_ADDRESS)
-      assert.strictEqual(hexAddr, HEX_ADDRESS)
-      hexAddr = KeyringController.base58ToHexString('0x' + HEX_ADDRESS)
-      assert.strictEqual(hexAddr, HEX_ADDRESS)
-    })
-  })
-
-  describe('#base58ToHexAddress', () => {
-    it('returns the hex form of address with 0x prefix', () => {
-      const hexAddr = KeyringController.base58ToHexAddress(BASE58_ADDRESS)
-      assert.strictEqual(hexAddr, '0x' + HEX_ADDRESS)
-    })
-  })
 })
