@@ -13,6 +13,14 @@ const bip32 = require('bip32')
 const bip39 = require('bip39')
 const TronWallet = require('./tron-wallet')
 
+// console.log("### dbip32: ", dbip32);
+// console.log("### ecc: ", ecc);
+
+// // const BIP32Interface = require('bip32')
+// // You must wrap a tiny-secp256k1 compatible implementation
+// const bip32 = dbip32.BIP32Factory(ecc);
+
+
 const BIP44_INDEX = '195'
 
 // Options:
