@@ -33,6 +33,7 @@
     "sinon": "^3.3.0"
   },
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.0.2",
     "bip32": "3.1.0",
     "bip39": "^2.4.0",
     "bluebird": "^3.5.0",
@@ -44,7 +45,6 @@
     "loglevel": "^1.5.0",
     "obs-store": "^2.4.1",
     "promise-filter": "^1.1.0",
-    "tiny-secp256k1": "^2.2.1",
     "tronweb": "^2.1.25"
   }
 }
