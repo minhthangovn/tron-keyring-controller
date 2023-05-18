@@ -74,7 +74,9 @@ class HdKeyring extends EventEmitter {
     log.debug('tronhd addaccounts')
     if (!this.root) {
       // Use 24 words mnemonic phrase
-      this._initFromMnemonic(bip39.generateMnemonic(256))
+      // this._initFromMnemonic(bip39.generateMnemonic(256))
+      // Use 14 words mnemonic phrase
+      this._initFromMnemonic(bip39.generateMnemonic(128))
     }
 
     const oldLen = this.wallets.length
