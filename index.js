@@ -30,8 +30,8 @@ class KeyringController extends EventEmitter {
   constructor(opts) {
     super()
     const initState = opts.initState || {}
-    // this.keyringTypes = opts.keyringTypes ? keyringTypes.concat(opts.keyringTypes) : keyringTypes
-    this.keyringTypes = keyringTypes
+    this.keyringTypes = opts.keyringTypes ? keyringTypes.concat(opts.keyringTypes) : keyringTypes
+    // this.keyringTypes = keyringTypes
     this.store = new ObservableStore(initState)
     this.memStore = new ObservableStore({
       isUnlocked: false,
@@ -161,21 +161,23 @@ class KeyringController extends EventEmitter {
   // All Keyring classes implement a unique `type` string,
   // and this is used to retrieve them from the keyringTypes array.
   addNewKeyring(type, opts) {
-    const Keyring = this.getKeyringClassForType(type)
-    const keyring = new Keyring(opts)
-    return keyring.getAccounts()
-      .then((accounts) => {
-        return this.checkForDuplicate(type, accounts)
-      })
-      .then(() => {
-        this.keyrings.push(keyring)
-        return this.persistAllKeyrings()
-      })
-      .then(() => this._updateMemStoreKeyrings())
-      .then(() => this.fullUpdate())
-      .then(() => {
-        return keyring
-      })
+    const Keyring = this.getKeyringClassForType(type);
+    if (Keyring) {
+      const keyring = new Keyring(opts);
+      return keyring.getAccounts()
+        .then((accounts) => {
+          return this.checkForDuplicate(type, accounts)
+        })
+        .then(() => {
+          this.keyrings.push(keyring)
+          return this.persistAllKeyrings()
+        })
+        .then(() => this._updateMemStoreKeyrings())
+        .then(() => this.fullUpdate())
+        .then(() => {
+          return keyring
+        });
+    }
   }
 
   // Remove Empty Keyrings
@@ -460,6 +462,8 @@ class KeyringController extends EventEmitter {
     // const type = "HD Key Tree";
 
     const Keyring = this.getKeyringClassForType(type)
+    console.log("🌈🌈🌈$$$$$$ Keyring: ", Keyring);
+
     if (Keyring) {
       const keyring = new Keyring()
       console.log("🌈🌈🌈 2. deserialize");
@@ -491,7 +495,7 @@ class KeyringController extends EventEmitter {
   // matches the provided `type`,
   // returning it if it exists.
   getKeyringClassForType(type) {
-    console.log("🌈🌈🌈 type: ", type);
+    console.log("🌈🌈🌈##### getKeyringClassForType: ", type);
     return this.keyringTypes.find(kr => kr.type === type)
   }
 
