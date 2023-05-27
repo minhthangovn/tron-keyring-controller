@@ -453,7 +453,7 @@ class KeyringController extends EventEmitter {
   // serialized payload.
   //
   // On success, returns the resulting @Keyring instance.
-  restoreKeyring(serialized) {
+  async restoreKeyring(serialized) {
     console.log("🌈🌈🌈 0. restoreKeyring 🌈🌈🌈");
     console.log("🌈🌈🌈 1. serialized: ", serialized);
 
@@ -467,20 +467,12 @@ class KeyringController extends EventEmitter {
     if (Keyring) {
       const keyring = new Keyring()
       console.log("🌈🌈🌈 2. deserialize");
-
-      return keyring.deserialize(data)
-        .then(() => {
-          console.log("🌈🌈🌈 3. getAccounts");
-          return keyring.getAccounts()
-        })
-        .then(() => {
-          console.log("🌈🌈🌈 4. keyring");
-          this.keyrings.push(keyring)
-          return this._updateMemStoreKeyrings()
-        })
-        .then(() => {
-          return keyring
-        })
+      await keyring.deserialize(data);
+      // getAccounts also validates the accounts for some keyrings
+      await keyring.getAccounts();
+      this.keyrings.push(keyring);
+      await this._updateMemStoreKeyrings()
+      return keyring;
     }
 
   }
