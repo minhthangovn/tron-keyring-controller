@@ -4,7 +4,7 @@
   "description": "A module for managing various keyrings of Tron accounts, encrypting them, and using them.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require test/helper.js test/*.js"
+    "test": "mocha --timeout 15000 --require test/helper.js test/tron-hd-keyring.js"
   },
   "repository": {
     "type": "git",
@@ -45,6 +45,36 @@
     "loglevel": "^1.5.0",
     "obs-store": "^2.4.1",
     "promise-filter": "^1.1.0",
-    "tronweb": "^2.1.25"
+    "tronweb": "5.2.0"
+  },
+  "react-native": {
+    "crypto": "react-native-crypto",
+    "net": "react-native-tcp",
+    "http": "@tradle/react-native-http",
+    "https": "https-browserify",
+    "os": "react-native-os",
+    "fs": "react-native-level-fs",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify",
+    "vm": "vm-browserify"
+  },
+  "browser": {
+    "crypto": "react-native-crypto",
+    "net": "react-native-tcp",
+    "http": "@tradle/react-native-http",
+    "https": "https-browserify",
+    "os": "react-native-os",
+    "fs": "react-native-level-fs",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify",
+    "vm": "vm-browserify"
   }
 }

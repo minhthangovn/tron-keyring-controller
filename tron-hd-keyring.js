@@ -5,7 +5,7 @@
  * used in MetaMask.
  * 
  * Thanks to tronprotocol/tron-web and TronWatch/TronLink
- */ 
+ */
 
 const log = require('loglevel')
 const EventEmitter = require('events').EventEmitter
@@ -37,13 +37,13 @@ class HdKeyring extends EventEmitter {
 
   /* PUBLIC METHODS */
 
-  constructor (opts = {}) {
+  constructor(opts = {}) {
     super()
     this.type = type
     this.deserialize(opts)
   }
 
-  serialize () {
+  serialize() {
     log.debug('tronhd serialize')
     return Promise.resolve({
       mnemonic: this.mnemonic,
@@ -51,7 +51,7 @@ class HdKeyring extends EventEmitter {
     })
   }
 
-  deserialize (opts = {}) {
+  deserialize(opts = {}) {
     log.debug('tronhd deserialize')
     this.opts = opts || {}
     this.wallets = []
@@ -70,7 +70,7 @@ class HdKeyring extends EventEmitter {
     return Promise.resolve([])
   }
 
-  addAccounts (numberOfAccounts = 1) {
+  addAccounts(numberOfAccounts = 1) {
     log.debug('tronhd addaccounts')
     if (!this.root) {
       // Use 24 words mnemonic phrase
@@ -83,7 +83,7 @@ class HdKeyring extends EventEmitter {
     const newWallets = []
     for (let i = oldLen; i < numberOfAccounts + oldLen; i++) {
       // TODO: not really HD implmentation, but good enough currently.
-      const child = this.root.derivePath(`m/44'/${ BIP44_INDEX }'/${ i }'/0/0`, this.seed);
+      const child = this.root.derivePath(`m/44'/${BIP44_INDEX}'/${i}'/0/0`, this.seed);
       const privateKey = child.privateKey.toString('hex');
       const wallet = new TronWallet({ privateKey })
       newWallets.push(wallet)
@@ -92,26 +92,69 @@ class HdKeyring extends EventEmitter {
     return Promise.resolve(newWallets.map((w) => w.address))
   }
 
-  getAccounts () {
+  getAccounts() {
     log.debug('tronhd getaccounts')
     return Promise.resolve(this.wallets.map((w) => w.address))
   }
 
   // tx is an instance of the ethereumjs-transaction class.
-  signTransaction (withAccount, tx) {
+  signTransaction(withAccount, tx) {
     log.debug('tronhd signTX')
     const wallet = this._getWalletForAccount(withAccount)
     return wallet.signTransaction(tx)
   }
 
+  // async signSendTransaction(withAccount, to, amount) {
+
+  //   log.debug('tronhd signTX')
+  //   const tronWeb = this._getWalletForAccount(withAccount);
+  //   console.log("##### wallet: ", tronWeb);
+  //   // const ethTxTmp = await tronWeb.wallet.transactionBuilder.sendTrx(to, amount, withAccount);
+
+  //   const ethTx = {
+  //     "visible": true,
+  //     "txID": "d97732ebe362d20fd010f15fbd138f3abcbe023aafe9afc260fe3883b08d0715",
+  //     "raw_data": {
+  //       "contract": [
+  //         {
+  //           "parameter": {
+  //             "value": {
+  //               "amount": 12,
+  //               "owner_address": "TSPt8QZwwc4yzRzBaXQ575o5vQztWt1pvQ",
+  //               "to_address": "TSGnr9H8qeYES11enyhaNogfVNQZQ9HCqU"
+  //             },
+  //             "type_url": "type.googleapis.com/protocol.TransferContract"
+  //           },
+  //           "type": "TransferContract"
+  //         }
+  //       ],
+  //       "ref_block_bytes": "7171",
+  //       "ref_block_hash": "1d41ee6553439936",
+  //       "expiration": 1686240903000,
+  //       "timestamp": 1686240845804
+  //     },
+  //     "raw_data_hex": "0a02717122081d41ee655343993640d8fea8de89315a65080112610a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412300a1541b42ca82d507d1b871d85ff79ac7c2f81b578fb3e121541b2d5565c5ebbfaf5f054d4df58b15cef2bde099c180c70ecbfa5de8931"
+  //   };
+
+
+
+  //   // console.log("##### ethTxTmp: ", ethTxTmp);
+  //   console.log("##### ethTx: ", ethTx);
+  //   // console.log("##### ethTxTmp.raw_data.contract.parameter: ", ethTx.raw_data.contract.parameter);
+  //   console.log("##### ethTx.raw_data.contract.parameter: ", ethTx.raw_data.contract.parameter);
+
+  //   return tronWeb.signTransaction(ethTxTmp)
+  // }
+
+
   // For eth_sign, we need to sign transactions:
-  signMessage (withAccount, data) {
+  signMessage(withAccount, data) {
     log.debug('tronhd signMSG')
     const wallet = this._getWalletForAccount(withAccount)
     return wallet.signMessage(data)
   }
 
-  exportAccount (address) {
+  exportAccount(address) {
     log.debug('tronhd exporthd')
     const wallet = this._getWalletForAccount(address)
     return Promise.resolve(wallet.privateKey)
@@ -119,7 +162,7 @@ class HdKeyring extends EventEmitter {
 
   /* PRIVATE METHODS */
 
-  _initFromMnemonic (mnemonic) {
+  _initFromMnemonic(mnemonic) {
     log.debug('tronhd _initFromMnemonic')
     if (!bip39.validateMnemonic(mnemonic)) {
       throw new Error(`Invalid Mnemonic provided: ${mnemonic}`);
@@ -129,8 +172,8 @@ class HdKeyring extends EventEmitter {
     this.root = bip32.fromSeed(new Buffer(this.seed, 'hex'))
   }
 
-  _getWalletForAccount (account) {
-    let wallet = this.wallets.find(w => w.address === account )
+  _getWalletForAccount(account) {
+    let wallet = this.wallets.find(w => w.address === account)
     if (!wallet) throw new Error('HD Keyring - Unable to find matching address.')
     return wallet
   }
