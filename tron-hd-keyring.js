@@ -100,64 +100,72 @@ class HdKeyring extends EventEmitter {
   // tx is an instance of the ethereumjs-transaction class.
   signTransaction(withAccount, tx) {
     log.debug('tronhd signTX')
-    const wallet = this._getWalletForAccount(withAccount)
-    return wallet.signTransaction(tx)
+    console.log("### tx: ", tx);
+    // console.log("### tx.transaction.raw_data.contract: ", tx.transaction.raw_data.contract);
+
+    const wallet = this._getWalletForAccount(withAccount);
+    return wallet.signTransaction(tx);
   }
 
-  // async signSendTransaction(withAccount, to, amount) {
+  signTRC20Transaction(withAccount, tx) {
+    log.debug('tronhd TRC20 signTX');
+    const wallet = this._getWalletForAccount(withAccount);
+    return wallet.signTransaction(tx.transaction);
+  }
 
-  //   log.debug('tronhd signTX')
-  //   const tronWeb = this._getWalletForAccount(withAccount);
-  //   console.log("##### wallet: ", tronWeb);
-  //   // const ethTxTmp = await tronWeb.wallet.transactionBuilder.sendTrx(to, amount, withAccount);
+  async txSend(fromAddress, toAddress, amount) {
+    const tronWallet = this._getWalletForAccount(fromAddress);
+    return await tronWallet.txSend(fromAddress, toAddress, amount);
+  }
 
-  //   const ethTx = {
-  //     "visible": true,
-  //     "txID": "d97732ebe362d20fd010f15fbd138f3abcbe023aafe9afc260fe3883b08d0715",
-  //     "raw_data": {
-  //       "contract": [
-  //         {
-  //           "parameter": {
-  //             "value": {
-  //               "amount": 12,
-  //               "owner_address": "TSPt8QZwwc4yzRzBaXQ575o5vQztWt1pvQ",
-  //               "to_address": "TSGnr9H8qeYES11enyhaNogfVNQZQ9HCqU"
-  //             },
-  //             "type_url": "type.googleapis.com/protocol.TransferContract"
-  //           },
-  //           "type": "TransferContract"
-  //         }
-  //       ],
-  //       "ref_block_bytes": "7171",
-  //       "ref_block_hash": "1d41ee6553439936",
-  //       "expiration": 1686240903000,
-  //       "timestamp": 1686240845804
-  //     },
-  //     "raw_data_hex": "0a02717122081d41ee655343993640d8fea8de89315a65080112610a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412300a1541b42ca82d507d1b871d85ff79ac7c2f81b578fb3e121541b2d5565c5ebbfaf5f054d4df58b15cef2bde099c180c70ecbfa5de8931"
-  //   };
+  async txTransferTRC20(contract, fromAddress, toAddress, amount) {
+    const tronWallet = this._getWalletForAccount(fromAddress);
+    return await tronWallet.txTransferTRC20(contract, fromAddress, toAddress, amount);
+  }
 
+  async broadcastTx(address, signedTx) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.broadcastTx(signedTx);
+  }
 
+  
+  async getBalance(address) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.getBalance(address);
+  }
 
-  //   // console.log("##### ethTxTmp: ", ethTxTmp);
-  //   console.log("##### ethTx: ", ethTx);
-  //   // console.log("##### ethTxTmp.raw_data.contract.parameter: ", ethTx.raw_data.contract.parameter);
-  //   console.log("##### ethTx.raw_data.contract.parameter: ", ethTx.raw_data.contract.parameter);
+  async getTRC20Balance(contract, address) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.getTRC20Balance(contract, address);
+  }
+  // getTRC20Balance
 
-  //   return tronWeb.signTransaction(ethTxTmp)
-  // }
+  async getBandwidth(address) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.getBandwidth(address);
+  }
+  
+  async getTransaction(address) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.getTransaction(address);
+  }
 
+  async getAccountNet(address) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.getAccountNet(address);
+  }
 
   // For eth_sign, we need to sign transactions:
   signMessage(withAccount, data) {
     log.debug('tronhd signMSG')
-    const wallet = this._getWalletForAccount(withAccount)
-    return wallet.signMessage(data)
+    const wallet = this._getWalletForAccount(withAccount);
+    return wallet.signMessage(data);
   }
 
   exportAccount(address) {
     log.debug('tronhd exporthd')
-    const wallet = this._getWalletForAccount(address)
-    return Promise.resolve(wallet.privateKey)
+    const wallet = this._getWalletForAccount(address);
+    return Promise.resolve(wallet.privateKey);
   }
 
   /* PRIVATE METHODS */
