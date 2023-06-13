@@ -46,7 +46,7 @@ class TronWallet {
     return new TronWallet({ privateKey })
   }
 
-  async txSend(fromAddress, toAddress, amount) {
+  async txSend(toAddress, amount) {
     return await this.wallet.transactionBuilder.sendTrx(
       toAddress,
       amount * unit

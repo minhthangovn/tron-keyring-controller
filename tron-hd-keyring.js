@@ -115,7 +115,7 @@ class HdKeyring extends EventEmitter {
 
   async txSend(fromAddress, toAddress, amount) {
     const tronWallet = this._getWalletForAccount(fromAddress);
-    return await tronWallet.txSend(fromAddress, toAddress, amount);
+    return await tronWallet.txSend(toAddress, amount);
   }
 
   async txTransferTRC20(contract, fromAddress, toAddress, amount) {
