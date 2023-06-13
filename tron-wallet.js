@@ -1,5 +1,7 @@
 
 const TronWeb = require('tronweb')
+const TronGrid = require('trongrid');
+
 const { ec } = require('elliptic')
 const fullNode = 'https://nile.trongrid.io'
 const solidityNode = 'https://nile.trongrid.io'
@@ -21,6 +23,8 @@ class TronWallet {
     this.wallet = new TronWeb(fullNode, solidityNode, eventServer, this.privateKey)
     this.address = this.wallet.defaultAddress.base58
     this.hexAddress = this.wallet.defaultAddress.hex
+    this.tronGrid = new TronGrid(this.wallet);
+
   }
 
   signTransaction(transaction) {
@@ -50,6 +54,7 @@ class TronWallet {
   }
 
   async txTransferTRC20(contract, fromAddress, toAddress, amount) {
+    // tronWeb.toSun(10) >"10000000"
     const options = {
       feeLimit: 50 * unit,
       callValue: 0
@@ -78,9 +83,7 @@ class TronWallet {
     await this.wallet.trx.getBandwidth(address);
   }
 
-  async getTransaction(address) {
-    await this.wallet.trx.getTransaction(address);
-  }
+  
 
   // transactionBuilder.estimateEnergy
   // {
@@ -104,6 +107,25 @@ class TronWallet {
   async toHex(address) {
     return this.wallet.address.toHex(address);
   }
+
+  async getTransaction(address) {
+    await this.wallet.trx.getTransaction(address);
+  }
+
+  async getTransactions(address) {
+    // const address = 'TPL66VK2gCXNCD7EJg9pgJRfqcRazjhUZY';
+
+    const options = {
+      onlyTo: true,
+      onlyConfirmed: true,
+      limit: 100,
+      orderBy: 'timestamp,asc',
+      minBlockTimestamp: Date.now() - 60000 // from a minute ago to go on
+    };
+
+    return await this.tronGrid.account.getTransactions(address, options);    
+  }
+
 }
 
 

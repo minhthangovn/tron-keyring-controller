@@ -128,9 +128,10 @@ class HdKeyring extends EventEmitter {
     return await tronWallet.broadcastTx(signedTx);
   }
 
-  
+
   async getBalance(address) {
     const tronWallet = this._getWalletForAccount(address);
+    // https://api.shasta.trongrid.io/v1/accounts/{address} - balance, others...
     return await tronWallet.getBalance(address);
   }
 
@@ -144,7 +145,7 @@ class HdKeyring extends EventEmitter {
     const tronWallet = this._getWalletForAccount(address);
     return await tronWallet.getBandwidth(address);
   }
-  
+
   async getTransaction(address) {
     const tronWallet = this._getWalletForAccount(address);
     return await tronWallet.getTransaction(address);
@@ -167,6 +168,13 @@ class HdKeyring extends EventEmitter {
     const wallet = this._getWalletForAccount(address);
     return Promise.resolve(wallet.privateKey);
   }
+
+
+  async getTransactions(address) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.getTransactions(address);
+  }
+
 
   /* PRIVATE METHODS */
 
