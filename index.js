@@ -297,6 +297,40 @@ class KeyringController extends EventEmitter {
       })
   }
 
+  async txSend(_fromAddress, _toAddress, amount) {
+    const fromAddress = normalizeAddress(_fromAddress);
+    const toAddress = normalizeAddress(_toAddress);
+    return this.getKeyringForAccount(fromAddress)
+      .then((keyring) => {
+        return keyring.txSend(fromAddress, toAddress, amount);
+      });
+  }
+
+  async txTransferTRC20(_contract, _fromAddress, _toAddress, amount) {
+    const fromAddress = normalizeAddress(_fromAddress);
+    const contract = normalizeAddress(_contract);
+    const toAddress = normalizeAddress(_toAddress);
+    return this.getKeyringForAccount(fromAddress)
+      .then((keyring) => {
+        return keyring.txTransferTRC20(contract, fromAddress, toAddress, amount);
+      });
+  }
+
+  async broadcastTx(_address, signedTx) {
+    const address = normalizeAddress(_address);
+    return this.getKeyringForAccount(address)
+      .then((keyring) => {
+        return keyring.broadcastTx(address, signedTx);
+      });
+  }
+
+  async getTransactions(_address) {
+    const address = normalizeAddress(_address);
+    return this.getKeyringForAccount(address)
+      .then((keyring) => {
+        return keyring.getTransactions(address);
+      });
+  }
 
   // SIGNING METHODS
   //
