@@ -345,6 +345,14 @@ class KeyringController extends EventEmitter {
       })
   }
 
+  signTRC20Transaction(ethTx, _fromAddress) {
+    const fromAddress = normalizeAddress(_fromAddress)
+    return this.getKeyringForAccount(fromAddress)
+      .then((keyring) => {
+        return keyring.signTRC20Transaction(fromAddress, ethTx)
+      })
+  }
+
   // Sign Message
   // @object msgParams
   //
