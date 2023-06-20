@@ -70,7 +70,8 @@ class TronWallet {
   }
 
   async getBalance(address) {
-    await this.wallet.trx.getBalance(address);
+    // return await this.wallet.trx.getBalance(address);
+    return await this.tronGrid.account.get(address).data;
   }
 
   async getTRC20Balance(contract, address) {
@@ -82,8 +83,6 @@ class TronWallet {
   async getBandwidth(address) {
     await this.wallet.trx.getBandwidth(address);
   }
-
-  
 
   // transactionBuilder.estimateEnergy
   // {
@@ -120,7 +119,7 @@ class TronWallet {
       onlyConfirmed: true,
       limit: 100,
       orderBy: 'timestamp,asc',
-      minBlockTimestamp: Date.now() - 60000 // from a minute ago to go on
+      // minBlockTimestamp: Date.now() - 30*24*60*60000 // from a minute ago to go on
     };
 
     return await this.tronGrid.account.getTransactions(address, options);    
