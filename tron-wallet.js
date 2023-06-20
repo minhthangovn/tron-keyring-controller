@@ -71,7 +71,8 @@ class TronWallet {
 
   async getBalance(address) {
     // return await this.wallet.trx.getBalance(address);
-    return await this.tronGrid.account.get(address).data;
+    const retJson =  await this.tronGrid.account.get(address);
+    return retJson.data ? retJson.data : null;
   }
 
   async getTRC20Balance(contract, address) {
@@ -126,8 +127,5 @@ class TronWallet {
   }
 
 }
-
-
-
 
 module.exports = TronWallet
