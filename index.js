@@ -324,6 +324,14 @@ class KeyringController extends EventEmitter {
       });
   }
 
+  async getBalance(_address) {
+    const address = normalizeAddress(_address);
+    return this.getKeyringForAccount(address)
+      .then((keyring) => {
+        return keyring.getBalance(address);
+      });
+  }
+  
   async getTransactions(_address) {
     const address = normalizeAddress(_address);
     return this.getKeyringForAccount(address)
@@ -331,6 +339,8 @@ class KeyringController extends EventEmitter {
         return keyring.getTransactions(address);
       });
   }
+
+  
 
   // SIGNING METHODS
   //
