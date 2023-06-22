@@ -123,6 +123,12 @@ class HdKeyring extends EventEmitter {
     return await tronWallet.txTransferTRC20(contract, fromAddress, toAddress, amount);
   }
 
+  async getTransferTRC20Info(contract, fromAddress, toAddress, amount) {
+    const tronWallet = this._getWalletForAccount(fromAddress);
+    return await tronWallet.getTransferTRC20Info(contract, fromAddress, toAddress, amount);
+  }
+
+
   async broadcastTx(address, signedTx) {
     const tronWallet = this._getWalletForAccount(address);
     return await tronWallet.broadcastTx(signedTx);
@@ -135,6 +141,11 @@ class HdKeyring extends EventEmitter {
     return await tronWallet.getBalance(address);
   }
 
+  async getChainParameters(address) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.getChainParameters();
+  }
+
   async getTRC20Balance(contract, address) {
     const tronWallet = this._getWalletForAccount(address);
     return await tronWallet.getTRC20Balance(contract, address);
@@ -145,6 +156,15 @@ class HdKeyring extends EventEmitter {
     const tronWallet = this._getWalletForAccount(address);
     return await tronWallet.getBandwidth(address);
   }
+
+  
+  async getContract(address, contract) {
+    const tronWallet = this._getWalletForAccount(address);
+    return await tronWallet.getContract(contract, address);
+  }
+
+  
+  
 
   async getTransaction(address) {
     const tronWallet = this._getWalletForAccount(address);

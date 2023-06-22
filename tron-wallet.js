@@ -69,21 +69,57 @@ class TronWallet {
     );
   }
 
+
+  async getTransferTRC20Info(contract, fromAddress, toAddress, amount) {
+    let txTransferTRC20 = await this.txTransferTRC20(contract, fromAddress, toAddress, amount);
+
+    console.log("#### this.wallet.transactionBuilder: ", this.wallet.transactionBuilder);
+
+    txTransferTRC20['estimateenergy'] =  await this.wallet.transactionBuilder.testimateEnergy(txTransferTRC20);
+    return txTransferTRC20;
+  }
+
   async getBalance(address) {
     // return await this.wallet.trx.getBalance(address);
-    const retJson =  await this.tronGrid.account.get(address);
+    const retJson = await this.tronGrid.account.get(address);
     return retJson.data ? retJson.data : null;
   }
 
-  async getTRC20Balance(contract, address) {
-    const detail = await this.wallet.trx.getContract(contract);
-    let contractTrx = await window.tronWeb.contract(detail.abi.entrys, contract);
-    return contractTrx.balanceOf(address).call();
+  async getChainParameters() {
+    const retJson = await this.wallet.trx.getChainParameters();
+    return retJson;
   }
+
+  // tronWeb.trx.getChainParameters();
+
+  // async getTRC20Balance(contract, address) {
+  //   const detail = await this.wallet.trx.getContract(contract);
+  //   let contractTrx = await window.tronWeb.contract(detail.abi.entrys, contract);
+  //   return contractTrx.balanceOf(address).call();
+  // }
 
   async getBandwidth(address) {
     await this.wallet.trx.getBandwidth(address);
   }
+
+  async getContract(contractAddr) {
+    const retJson = await this.wallet.trx.getContract(contractAddr);
+    return retJson;
+  }
+
+  async estimateenergy(tx) {
+    return await this.wallet.transactionBuilder.estimateenergy(tx);
+  }
+
+
+  // triggerconstantcontract({
+  //   owner_address: 'TZ4UXDV5ZhNW7fb2AMSbgfAEZ7hWsnYS2g',
+  //   contract_address: 'TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs',
+  //   function_selector: 'balanceOf(address)',
+  //   parameter: '000000000000000000000000a614f803b6fd780986a42c78ec9c7f77e6ded13c',
+  //   visible: true
+  // })
+
 
   // transactionBuilder.estimateEnergy
   // {

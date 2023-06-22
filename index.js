@@ -332,6 +332,15 @@ class KeyringController extends EventEmitter {
       });
   }
   
+  async getContract(_address, _contract) {
+    const address = normalizeAddress(_address);
+    const contract = normalizeAddress(_contract);
+    return this.getKeyringForAccount(address)
+      .then((keyring) => {
+        return keyring.getContract(address, contract);
+      });
+  }
+
   async getTransactions(_address) {
     const address = normalizeAddress(_address);
     return this.getKeyringForAccount(address)
