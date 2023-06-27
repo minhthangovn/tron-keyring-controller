@@ -20,11 +20,18 @@ class TronWallet {
 
   deserialize(opts = {}) {
     this.privateKey = opts.privateKey.replace(/^0x/, '')
-    this.wallet = new TronWeb(fullNode, solidityNode, eventServer, this.privateKey)
+    const rpcTarget = opts.rpcTarget || fullNode;
+    this.wallet = new TronWeb(rpcTarget, rpcTarget, rpcTarget, this.privateKey)
     this.address = this.wallet.defaultAddress.base58
     this.hexAddress = this.wallet.defaultAddress.hex
     this.tronGrid = new TronGrid(this.wallet);
 
+  }
+
+  async updateRpcTarget(rpcTarget) {
+    this.wallet.setFullNode(rpcTarget);
+    this.wallet.setSolidityNode(rpcTarget);
+    this.wallet.setEventServer(rpcTarget);
   }
 
   signTransaction(transaction) {
@@ -73,7 +80,7 @@ class TronWallet {
   async getTransferTRC20Info(contract, fromAddress, toAddress, amount) {
     let txTransferTRC20 = await this.txTransferTRC20(contract, fromAddress, toAddress, amount);
 
-    console.log("#### this.wallet.transactionBuilder: ", this.wallet.transactionBuilder);
+    // console.log("#### this.wallet.transactionBuilder: ", this.wallet.transactionBuilder);
 
     txTransferTRC20['estimateenergy'] =  await this.wallet.transactionBuilder.testimateEnergy(txTransferTRC20);
     return txTransferTRC20;
@@ -159,7 +166,7 @@ class TronWallet {
       // minBlockTimestamp: Date.now() - 30*24*60*60000 // from a minute ago to go on
     };
 
-    return await this.tronGrid.account.getTransactions(address, options);    
+    return await this.tronGrid.account.getTransactions(address, options);
   }
 
 }

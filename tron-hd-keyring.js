@@ -58,6 +58,7 @@ class HdKeyring extends EventEmitter {
     this.mnemonic = null
     this.root = null
     this.testNet = opts.testNet || false
+    this.currentRpcTarget = opts.currentRpcTarget || 'https://nile.trongrid.io';
 
     if (opts.mnemonic) {
       this._initFromMnemonic(opts.mnemonic)
@@ -81,15 +82,23 @@ class HdKeyring extends EventEmitter {
 
     const oldLen = this.wallets.length
     const newWallets = []
+    const rpcTarget = this.currentRpcTarget;
     for (let i = oldLen; i < numberOfAccounts + oldLen; i++) {
       // TODO: not really HD implmentation, but good enough currently.
       const child = this.root.derivePath(`m/44'/${BIP44_INDEX}'/${i}'/0/0`, this.seed);
       const privateKey = child.privateKey.toString('hex');
-      const wallet = new TronWallet({ privateKey })
+      const wallet = new TronWallet({ privateKey, rpcTarget })
       newWallets.push(wallet)
       this.wallets.push(wallet)
     }
     return Promise.resolve(newWallets.map((w) => w.address))
+  }
+
+  async switcherNetwork(rpcTarget) {
+    this.currentRpcTarget = rpcTarget;
+    for (const wallet of this.wallets) {
+      await wallet.updateRpcTarget(rpcTarget);
+    }
   }
 
   getAccounts() {

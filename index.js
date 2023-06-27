@@ -29,10 +29,8 @@ class KeyringController extends EventEmitter {
 
   constructor(opts) {
     super()
-    const initState = opts.initState || {}
     this.keyringTypes = opts.keyringTypes ? keyringTypes.concat(opts.keyringTypes) : keyringTypes
-    // this.keyringTypes = keyringTypes
-    this.store = new ObservableStore(initState)
+    this.store = new ObservableStore(opts.initState || {})
     this.memStore = new ObservableStore({
       isUnlocked: false,
       keyringTypes: this.keyringTypes.map(krt => krt.type),
@@ -40,8 +38,16 @@ class KeyringController extends EventEmitter {
     })
 
     this.encryptor = opts.encryptor || encryptor
-    this.keyrings = []
     this.getNetwork = opts.getNetwork
+    // RPC network
+    this.currentRpcTarget = opts.rpcTarget;
+    this.keyrings = []
+  }
+
+  async switcherNetwork(rpcTarget) {
+    this.currentRpcTarget = rpcTarget;
+    // Update rpcTarget
+    
   }
 
   // Full Update
@@ -163,7 +169,8 @@ class KeyringController extends EventEmitter {
   addNewKeyring(type, opts) {
     const Keyring = this.getKeyringClassForType(type);
     if (Keyring) {
-      const keyring = new Keyring(opts);
+      const rpcTarget = this.currentRpcTarget;
+      const keyring = new Keyring(Object.assign(opts, { rpcTarget }));
       return keyring.getAccounts()
         .then((accounts) => {
           return this.checkForDuplicate(type, accounts)
@@ -331,7 +338,7 @@ class KeyringController extends EventEmitter {
         return keyring.getBalance(address);
       });
   }
-  
+
   async getContract(_address, _contract) {
     const address = normalizeAddress(_address);
     const contract = normalizeAddress(_contract);
@@ -349,7 +356,9 @@ class KeyringController extends EventEmitter {
       });
   }
 
-  
+  async switcherNetwork(rpcTarget) {
+    this.currentRpcTarget = rpcTarget;
+  }
 
   // SIGNING METHODS
   //
@@ -583,16 +592,22 @@ class KeyringController extends EventEmitter {
     const hexed = normalizeAddress(address)
     log.debug(`KeyringController - getKeyringForAccount: ${hexed}`)
 
+    console.log("####### this.keyrings: ", this.keyrings);
+
     return Promise.all(this.keyrings.map((keyring) => {
       return Promise.all([
         keyring,
         keyring.getAccounts(),
       ])
     }))
-      .then(filter((candidate) => {
-        const accounts = candidate[1].map(normalizeAddress)
-        return accounts.includes(hexed)
-      }))
+      .then(
+        filter((candidate) => {
+          console.log("####### candidate: ", candidate);
+
+          const accounts = candidate[1].map(normalizeAddress)
+          return accounts.includes(hexed)
+        })
+      )
       .then((winners) => {
         if (winners && winners.length > 0) {
           return winners[0][0]
