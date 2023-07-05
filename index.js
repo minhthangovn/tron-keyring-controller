@@ -47,7 +47,7 @@ class KeyringController extends EventEmitter {
   async switcherNetwork(rpcTarget) {
     this.currentRpcTarget = rpcTarget;
     // Update rpcTarget
-    
+
   }
 
   // Full Update
@@ -66,6 +66,18 @@ class KeyringController extends EventEmitter {
     return this.memStore.getState()
   }
 
+  /**
+   * Unlock Keyrings
+   *
+   * Unlocks the keyrings.
+   *
+   * @emits KeyringController#unlock
+   */
+  setUnlocked() {
+    this.memStore.updateState({ isUnlocked: true });
+    this.emit('unlock');
+  }
+
   // Create New Vault And Keychain
   // @string password - The password to encrypt the vault with
   //
@@ -76,10 +88,10 @@ class KeyringController extends EventEmitter {
   // randomly creates a new HD wallet with 1 account,
   // faucets that account on the testnet.
   createNewVaultAndKeychain(password) {
-    return this.persistAllKeyrings(password)
-      .then(this.createFirstKeyTree.bind(this))
+    return this.createFirstKeyTree(password)
       .then(this.persistAllKeyrings.bind(this, password))
-      .then(this.fullUpdate.bind(this))
+      .then(this.setUnlocked.bind(this))
+      .then(this.fullUpdate.bind(this));
   }
 
   createVaultAndKeychain(password) {
@@ -439,6 +451,7 @@ class KeyringController extends EventEmitter {
   // faucets that account on testnet,
   // puts the current seed words into the state tree.
   createFirstKeyTree() {
+    this.password = password;
     this.clearKeyrings()
     return this.addNewKeyring(HD_KEYRING_NAME, { numberOfAccounts: 1 })
       .then((keyring) => {
@@ -463,22 +476,23 @@ class KeyringController extends EventEmitter {
   // encrypts that array with the provided `password`,
   // and persists that encrypted string to storage.
   persistAllKeyrings(password = this.password) {
+
     if (typeof password !== 'string') {
       return Promise.reject('KeyringController - password is not a string')
     }
 
     this.password = password
-    this.memStore.updateState({ isUnlocked: true })
-    return Promise.all(this.keyrings.map((keyring) => {
-      return Promise.all([keyring.type, keyring.serialize()])
-        .then((serializedKeyringArray) => {
-          // Label the output values on each serialized Keyring:
-          return {
-            type: serializedKeyringArray[0],
-            data: serializedKeyringArray[1],
-          }
-        })
-    }))
+    return Promise.all
+      (this.keyrings.map((keyring) => {
+        return Promise.all([keyring.type, keyring.serialize()])
+          .then((serializedKeyringArray) => {
+            // Label the output values on each serialized Keyring:
+            return {
+              type: serializedKeyringArray[0],
+              data: serializedKeyringArray[1],
+            }
+          })
+      }))
       .then((serializedKeyrings) => {
         return this.encryptor.encrypt(this.password, serializedKeyrings)
       })
