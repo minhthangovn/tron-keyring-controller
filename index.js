@@ -82,6 +82,11 @@ class KeyringController extends EventEmitter {
       .then(this.fullUpdate.bind(this))
   }
 
+  createVaultAndKeychain(password) {
+    return this.persistAllKeyrings(password)
+      .then(this.fullUpdate.bind(this))
+  }
+
   // CreateNewVaultAndRestore
   // @string password - The password to encrypt the vault with
   // @string seed - The BIP44-compliant seed phrase.

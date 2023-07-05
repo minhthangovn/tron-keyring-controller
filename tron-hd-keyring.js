@@ -58,7 +58,7 @@ class HdKeyring extends EventEmitter {
     this.mnemonic = null
     this.root = null
     this.testNet = opts.testNet || false
-    this.currentRpcTarget = opts.currentRpcTarget || 'https://nile.trongrid.io';
+    this.currentRpcTarget = opts.currentRpcTarget || DefaultNetwork;
 
     if (opts.mnemonic) {
       this._initFromMnemonic(opts.mnemonic)
