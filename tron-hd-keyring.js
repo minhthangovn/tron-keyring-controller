@@ -30,6 +30,7 @@ const BIP44_INDEX = '195'
 
 // Options:
 const type = 'HD Key Tree'
+const DefaultNetwork = 'https://nile.trongrid.io';
 
 log.setDefaultLevel(process.env.METAMASK_DEBUG ? 'debug' : 'warn')
 
